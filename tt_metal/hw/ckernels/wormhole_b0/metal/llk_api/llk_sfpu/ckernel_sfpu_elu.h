@@ -11,6 +11,9 @@
 
 namespace ckernel::sfpu {
 
+// Programs the Cody-Waite constants of expm1_cw_clamped into vConstFloatPrgm0/1/2, which calculate_elu
+// reads on every row. Nothing else may program Prgm0..2 between this init and calculate_elu; on Wormhole
+// sfpu_reciprocal_init owns all three (its Newton-seed coefficients), so no reciprocal may run in between.
 inline void elu_init() {
     math::reset_counters(p_setrwc::SET_ABD_F);
     expm1_cw_init_prgm_consts();
