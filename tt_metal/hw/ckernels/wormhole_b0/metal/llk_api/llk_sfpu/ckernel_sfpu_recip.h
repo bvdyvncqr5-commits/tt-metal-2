@@ -26,8 +26,8 @@ namespace sfpu {
 // reciprocal ±2^-126 at input ±2^126 instead of flushing an intermediate result.
 // normalized=true requires a finite input with magnitude in [1, 2) and skips scaling.
 // _softsign_x2_ in ckernel_sfpu_softsign.h carries a two-row interleaved copy of this
-// algorithm (seed, scale, Newton-Raphson steps) on values scaled by -1/2; keep it in sync
-// with changes here.
+// algorithm (seed, scale, Newton-Raphson steps) on values scaled by -1/2, and the macro
+// paths of _calculate_reciprocal_internal_ match <2> and <1, true>; keep them in sync with changes here.
 template <int max_iter = 2, bool round_to_bf16 = false, bool normalized = false>
 sfpi_inline sfpi::vFloat sfpu_reciprocal_iter(const sfpi::vFloat in) {
     // Combines the sign and exponent of -1.0 with the mantissa of `in`.
@@ -114,7 +114,7 @@ constexpr std::uint32_t RECIP_SEQ_SCALE_FP32_A = 0x3705;
 constexpr std::uint32_t RECIP_SEQ_SCALE_FP32_B = 0x3f05;
 constexpr std::uint32_t RECIP_SEQ_SIGN_STORE_LO = 0x00c6;
 constexpr std::uint32_t RECIP_SEQ_SIGN_STORE_HI = 0x4b00;
-// UnitDelayKind = elapsed instructions; set on entry and cleared on exit of each call (see #46751).
+// UnitDelayKind = elapsed instructions; set on entry and cleared on exit of each call.
 constexpr std::uint32_t RECIP_MACRO_MISC = 0xf40;
 
 inline void reciprocal_bf16_macro_config() {
